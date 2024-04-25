@@ -1,16 +1,16 @@
-package com.example.enjoytrip.account.domain;
+package com.example.enjoytrip.account.dto;
 
+import com.example.enjoytrip.account.domain.AccountRole;
 import lombok.*;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Account {
+public class AccountResponseDto {
     private Long accountId;
     private String accountEmail;
-    private String accountPassword;
     private String accountNickname;
     private AccountRole accountRole;
 }
