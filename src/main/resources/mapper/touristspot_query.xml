@@ -5,79 +5,46 @@
 <mapper namespace="com.example.enjoytrip.touristspot.dao.TouristspotDao">
 
     <select id="findAll" parameterType="com.example.enjoytrip.common.dto.PageDto" resultType="com.example.enjoytrip.touristspot.domain.TouristSpot">
-        SELECT id, name, age FROM your_table WHERE id = #{id}
+        select *
+        from touristspot
+        limit #{pageSize} offset #{pageNum}
     </select>
 
-    <insert id="testInsert" parameterType="com.example.enjoytrip.touristspot.domain.TouristSpot">
-        INSERT INTO touristspot
-        (touristspot_id, touristspot_title, touristspot_addr, touristspot_zipcode, touristspot_sido_code, )
-    </insert>
+    <select id="findBySido" parameterType="map" resultType="com.example.enjoytrip.touristspot.domain.TouristSpot">
+        select *
+        from touristspot
+        where touristspot_sido_code = #{sidoCode}
+        limit #{pageDto.pageSize} offset #{pageDto.pageNum}
+    </select>
 
-    <!-- 테스트 환경을 위한 테이블 생성 -->
-    <sql id="createTables">
-        DROP TABLE IF EXISTS relation;
-        DROP TABLE IF EXISTS comment;
-        DROP TABLE IF EXISTS board;
-        DROP TABLE IF EXISTS account;
-        DROP TABLE IF EXISTS touristspot;
+    <select id="findByGugun" parameterType="map" resultType="com.example.enjoytrip.touristspot.domain.TouristSpot">
+        select *
+        from touristspot
+        where touristspot_gugun_code = #{gugunCode}
+        limit #{pageDto.pageSize} offset #{pageDto.pageNum}
+    </select>
 
-        CREATE TABLE account (
-                                 account_id int AUTO_INCREMENT,
-                                 account_email varchar(255) NOT NULL,
-                                 account_password varchar(255) NOT NULL,
-                                 account_role varchar(10) DEFAULT NULL,  -- ENUM을 VARCHAR로 변환
-                                 account_nickname varchar(45) NOT NULL,
-                                 PRIMARY KEY (account_id),
-                                 UNIQUE (account_email)
-        );
+    <select id="findByKeyword" parameterType="map" resultType="com.example.enjoytrip.touristspot.domain.TouristSpot">
+        select *
+        from touristspot
+        where touristspot_title like concat('%', #{keyword}, '%')
+        limit #{pageDto.pageSize} offset #{pageDto.pageNum}
+    </select>
 
-        CREATE TABLE touristspot (
-                                     touristspot_id bigint AUTO_INCREMENT,
-                                     touristspot_title varchar(100),
-                                     touristspot_addr varchar(100),
-                                     touristspot_zipcode varchar(50),
-                                     touristspot_sido_code int,
-                                     touristspot_gugun_code int,
-                                     touristspot_latitude decimal(20,17),
-                                     touristspot_longitude decimal(20,17),
-                                     touristspot_like int,
-                                     PRIMARY KEY (touristspot_id)
-        );
+    <select id="findById" parameterType="int" resultType="com.example.enjoytrip.touristspot.domain.TouristSpot">
+        select *
+        from touristspot
+        where touristspot_id = #{touristspotId}
+    </select>
 
-        CREATE TABLE board (
-                               board_id int AUTO_INCREMENT,
-                               board_touristspot_id int NOT NULL,
-                               board_title varchar(45) NOT NULL,
-                               board_content varchar(255) NOT NULL,
-                               board_comment varchar(255) NOT NULL,
-                               board_account_id int NOT NULL,
-                               PRIMARY KEY (board_id),
-                               FOREIGN KEY (board_account_id) REFERENCES account(account_id),
-                               FOREIGN KEY (board_touristspot_id) REFERENCES touristspot(touristspot_id)
-        );
+    <select id="findByCoordinates" parameterType="map" resultType="com.example.enjoytrip.touristspot.domain.TouristSpot">
+        SELECT *
+        FROM touristspot
+        WHERE touristspot_latitude &lt;= #{touristCoordinateDto.northLatitude} AND touristspot_latitude &gt;= #{touristCoordinateDto.southLatitude}
+          AND touristspot_longitude &lt;= #{touristCoordinateDto.eastLongitude} AND touristspot_longitude &gt;= #{touristCoordinateDto.westLongitude}
+            LIMIT #{pageDto.pageSize} OFFSET #{pageDto.pageNum}
+    </select>
 
-        CREATE TABLE comment (
-                                 comment_id int AUTO_INCREMENT,
-                                 comment_board_id int NOT NULL,
-                                 comment_account_id int NOT NULL,
-                                 comment_content varchar(255) NOT NULL,
-                                 PRIMARY KEY (comment_id),
-                                 FOREIGN KEY (comment_board_id) REFERENCES board(board_id),
-                                 FOREIGN KEY (comment_account_id) REFERENCES account(account_id)
-        );
 
-        CREATE TABLE relation (
-                                  me int NOT NULL,
-                                  friend int NOT NULL,
-                                  PRIMARY KEY (me, friend),
-                                  FOREIGN KEY (friend) REFERENCES account(account_id),
-                                  FOREIGN KEY (me) REFERENCES account(account_id)
-        );
-    </sql>
-
-    <!-- 테이블 생성 실행 -->
-    <update id="initializeDatabase">
-        <include refid="createTables"/>
-    </update>
 
 </mapper>

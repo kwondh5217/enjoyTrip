@@ -1,8 +1,8 @@
 package com.example.enjoytrip.touristspot.service;
 
 import com.example.enjoytrip.common.dto.PageDto;
-import com.example.enjoytrip.touristspot.dto.TouristCoordinateDto;
 import com.example.enjoytrip.touristspot.domain.TouristSpot;
+import com.example.enjoytrip.touristspot.dto.TouristCoordinateDto;
 
 import java.util.List;
 

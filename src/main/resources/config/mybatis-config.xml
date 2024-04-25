@@ -8,5 +8,6 @@
 
     <mappers>
         <mapper resource="mapper/touristspot_query.xml" />
+        <mapper resource="mapper/account_query.xml" />
     </mappers>
 </configuration>

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Getter @Setter @Builder
 public class TouristSpot {
     private Integer touristspotId;
@@ -16,5 +17,5 @@ public class TouristSpot {
     private Integer touristspotGugunCode;
     private BigDecimal touristspotLatitude;
     private BigDecimal touristspotLongitude;
-    private Integer like;
+    private Integer touristspotLike;
 }
