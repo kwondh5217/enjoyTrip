@@ -16,4 +16,5 @@ public class TouristSpot {
     private Integer touristspotGugunCode;
     private BigDecimal touristspotLatitude;
     private BigDecimal touristspotLongitude;
+    private Integer like;
 }
