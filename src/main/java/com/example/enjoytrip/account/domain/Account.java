@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @Builder
 public class Account {
-    private Long accountId;
+    private Integer accountId;
     private String accountEmail;
     private String accountPassword;
     private String accountNickname;

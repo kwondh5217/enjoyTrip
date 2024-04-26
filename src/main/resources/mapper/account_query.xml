@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.enjoytrip.account.dao.AccountDao">
+
+
+    <insert id="join" useGeneratedKeys="true" keyProperty="accountId" parameterType="com.example.enjoytrip.account.dto.AccountRequestDto">
+        insert into account (account_email, account_password, account_role, account_nickname)
+        values (#{accountEmail}, #{accountPassword}, #{accountRole}, #{accountNickname})
+    </insert>
+
+    <select id="findById" resultType="com.example.enjoytrip.account.domain.Account"
+            parameterType="int">
+        select account_id, account_email, account_password, account_role, account_nickname
+        from account
+        where account_id = #{accountId}
+    </select>
+
+    <update id="update" parameterType="com.example.enjoytrip.account.domain.Account">
+        update account
+        set account_email = #{accountEmail},
+            account_password = #{accountPassword},
+            account_role = #{accountRole},
+            account_nickname = #{accountNickname}
+        where account_id = #{accountId};
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete
+        from account
+        where account_id = #{accountId};
+    </delete>
+
+    <select id="findByEmail" parameterType="string" resultType="com.example.enjoytrip.account.domain.Account">
+        select *
+        from account
+        where account_email = #{email}
+    </select>
+
+
+</mapper>

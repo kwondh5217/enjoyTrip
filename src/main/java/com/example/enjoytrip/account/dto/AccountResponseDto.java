@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @Builder
 public class AccountResponseDto {
-    private Long accountId;
+    private Integer accountId;
     private String accountEmail;
     private String accountNickname;
     private AccountRole accountRole;
