@@ -1,6 +1,7 @@
 package com.example.enjoytrip.touristspot.controller;
 
 import com.example.enjoytrip.common.dto.PageDto;
+import com.example.enjoytrip.config.SecurityConfig;
 import com.example.enjoytrip.touristspot.domain.TouristSpot;
 import com.example.enjoytrip.touristspot.service.TouristspotService;
 import org.junit.jupiter.api.DisplayName;
@@ -8,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Import(SecurityConfig.class)
 @ActiveProfiles("test")
 @WebMvcTest(controllers = TouristspotController.class)
 class TouristspotControllerTest {

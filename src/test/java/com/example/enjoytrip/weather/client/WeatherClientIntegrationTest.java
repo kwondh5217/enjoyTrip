@@ -1,6 +1,7 @@
 package com.example.enjoytrip.weather.client;
 
 import com.example.enjoytrip.weather.dto.WeatherRequestDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ class WeatherClientIntegrationTest {
     @Autowired
     WeatherClient weatherClient;
 
+    @DisplayName("날씨 외부 API를 호출한다. 오류발생시 날짜 갱신")
     @Test
     void getVilageFcst(){
         // given

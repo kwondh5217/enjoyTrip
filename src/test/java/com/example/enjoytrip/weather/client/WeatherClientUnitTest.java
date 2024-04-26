@@ -1,6 +1,7 @@
 package com.example.enjoytrip.weather.client;
 
 import com.example.enjoytrip.weather.dto.WeatherRequestDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,6 +14,7 @@ class WeatherClientUnitTest {
         this.weatherClient = new WeatherClientMock();
     }
 
+    @DisplayName("날씨 외부 API 단위 테스트")
     @Test
     void getVilageFcst() {
         // given
