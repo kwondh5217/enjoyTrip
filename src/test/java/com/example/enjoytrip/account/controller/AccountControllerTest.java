@@ -40,29 +40,28 @@ class AccountControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    private Account account;
-    private AccountRequestDto requestDto;
-    private AccountResponseDto responseDto;
+    static final int VALID_ACCOUNT_ID = 1;
+    Account account;
+    AccountRequestDto requestDto;
+    AccountResponseDto responseDto;
 
     @BeforeEach
     void setUp() {
-        Integer id = 1;
         String email = "test@email.com";
         String password = "pass";
         String nickname = "daeho";
         AccountRole accountRole = AccountRole.USER;
 
-        account = AccountTestUtil.createAccount(id, email, password, nickname, accountRole);
+        account = AccountTestUtil.createAccount(VALID_ACCOUNT_ID, email, password, nickname, accountRole);
         requestDto = AccountTestUtil.createAccountRequestDto(email, password, nickname);
-        responseDto = AccountTestUtil.createAccountResponseDto(id, email, nickname, accountRole);
+        responseDto = AccountTestUtil.createAccountResponseDto(VALID_ACCOUNT_ID, email, nickname, accountRole);
     }
 
     @DisplayName("정상적인 회원가입 요청 시 201 Created 상태 코드와 회원 ID 반환")
     @Test
     void join_success() throws Exception {
         // given: 회원가입에 필요한 데이터와 서비스 응답을 설정
-        Integer expectedId = 1;
-        given(accountService.join(any(AccountRequestDto.class))).willReturn(expectedId);
+        given(accountService.join(any(AccountRequestDto.class))).willReturn(VALID_ACCOUNT_ID);
 
         // when: 회원가입 API를 호출
         ResultActions resultActions = mockMvc.perform(post("/accounts")
@@ -72,7 +71,7 @@ class AccountControllerTest {
         // then: API 응답이 201 Created 상태이고, 반환된 회원 ID가 정상적임을 검증
         resultActions
                 .andExpect(status().isCreated())
-                .andExpect(content().string(expectedId.toString()));
+                .andExpect(content().string(String.valueOf(VALID_ACCOUNT_ID)));
     }
 
     @DisplayName("유효한 회원 ID로 조회 요청 시 200 상태 코드와 회원정보 반환")
@@ -83,21 +82,21 @@ class AccountControllerTest {
 
         // when: 회원조회 API 호출
         ResultActions resultActions = mockMvc.perform(
-                get("/accounts/{accountId}", responseDto.getAccountId())
+                get("/accounts/{accountId}", VALID_ACCOUNT_ID)
         );
 
         // then: API 응답이 200 상태이고, 반환된 회원정보가 정상적임을 검증
         resultActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("accountId")
+                .andExpect(jsonPath("$.accountId")
                         .value(String.valueOf(responseDto.getAccountId())))
-                .andExpect(jsonPath("accountEmail")
+                .andExpect(jsonPath("$.accountEmail")
                         .value(responseDto.getAccountEmail()))
-                .andExpect(jsonPath("accountPassword")
+                .andExpect(jsonPath("$.accountPassword")
                         .doesNotExist())
-                .andExpect(jsonPath("accountNickname")
+                .andExpect(jsonPath("$.accountNickname")
                         .value(responseDto.getAccountNickname()))
-                .andExpect(jsonPath("accountRole")
+                .andExpect(jsonPath("$.accountRole")
                         .value(responseDto.getAccountRole().toString()));
     }
 
@@ -105,18 +104,18 @@ class AccountControllerTest {
     @Test
     void update_success() throws Exception{
         // given: 회원수정에 필요한 데이터와 서비스 응답을 설정
-        given(accountService.update(any(Account.class))).willReturn(1);
+        given(accountService.update(any(Account.class))).willReturn(VALID_ACCOUNT_ID);
 
         // when : 회원수정 API 호출
         ResultActions resultActions = mockMvc.perform(
-                put("/accounts/{accountId}", account.getAccountId())
+                put("/accounts/{accountId}", VALID_ACCOUNT_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(account))
         );
 
         // then : 반환된 상태코드가 정상적임을 검증
         resultActions
-                .andExpect(jsonPath("code").exists())
+                .andExpect(jsonPath("$.code").exists())
                 .andExpect(status().isOk());
     }
 
@@ -125,16 +124,17 @@ class AccountControllerTest {
     @Test
     void delete_success() throws Exception{
         // given : 회원삭제에 필요한 서비스 응답을 설정
-        given(accountService.delete(any(Integer.class))).willReturn(1);
+        int successCode = 1;
+        given(accountService.delete(any(Integer.class))).willReturn(successCode);
 
         // when : 회원삭제 API 호출
         ResultActions resultActions = mockMvc.perform(
-                delete("/accounts/{accountId}", 1)
+                delete("/accounts/{accountId}", VALID_ACCOUNT_ID)
         );
 
         // then : 반환된 상태코드가 정상적임을 검증
         resultActions
-                .andExpect(jsonPath("code").exists())
+                .andExpect(jsonPath("$.code").exists())
                 .andExpect(status().isOk());
     }
 }
