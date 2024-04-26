@@ -2,6 +2,7 @@ package com.example.enjoytrip.account.domain;
 
 import lombok.*;
 
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
