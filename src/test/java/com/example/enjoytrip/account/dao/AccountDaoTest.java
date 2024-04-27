@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 
 @ActiveProfiles("test")
-@DisplayName("AccountDao 테스트")
+@DisplayName("AccountDao 단위 테스트")
 @Transactional
 @MybatisTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
