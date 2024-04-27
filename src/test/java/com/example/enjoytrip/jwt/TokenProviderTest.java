@@ -76,8 +76,7 @@ class TokenProviderTest {
                 new Date(System.currentTimeMillis()+EXPIRATION_TIME));
 
         // expect
-        Assertions.assertThrows(SignatureException.class,
-                () -> tokenProvider.validateToken(invalidToken));
+        Assertions.assertFalse(tokenProvider.validateToken(invalidToken));
     }
 
     @DisplayName("토큰이 만료되었을 경우 에러를 발생")
@@ -88,8 +87,7 @@ class TokenProviderTest {
         String invalidToken = createToken(userEmail, key, new Date(System.currentTimeMillis() - 1000));
 
         // expect
-        Assertions.assertThrows(ExpiredJwtException.class,
-                () -> tokenProvider.validateToken(invalidToken));
+        Assertions.assertFalse(tokenProvider.validateToken(invalidToken));
     }
 
     @DisplayName("토큰의 형식이 잘못되었을 경우 에러를 발생")
@@ -99,8 +97,7 @@ class TokenProviderTest {
         String illegalToken = "this.is.wrong.token.";
 
         // expect
-        Assertions.assertThrows(MalformedJwtException.class,
-                () -> tokenProvider.validateToken(illegalToken));
+        Assertions.assertFalse(tokenProvider.validateToken(illegalToken));
     }
 
     @DisplayName("토큰에서 사용자의 이메일을 찾아서 반환")
