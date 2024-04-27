@@ -15,6 +15,7 @@ public enum ErrorCode {
     invalidCoordinate(HttpStatus.BAD_REQUEST, "유효하지 않은 위치 정보입니다."),
     NotnullWeatherCoordinate(HttpStatus.BAD_REQUEST, "위치 정보는 필수 입력값입니다."),
     Unauthorized(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
+    UserNotFoundException(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     Forbidden(HttpStatus.FORBIDDEN, "접근 권한이 없는 사용자입니다."),
     DuplicateUserEmail(HttpStatus.CONFLICT, "존재하는 유저입니다.");
 
