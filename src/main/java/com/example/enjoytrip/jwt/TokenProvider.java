@@ -44,4 +44,12 @@ public class TokenProvider {
                 .getPayload();
         return true;
     }
+
+    public String getEmailFromToken(String token){
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload().getSubject();
+    }
 }
