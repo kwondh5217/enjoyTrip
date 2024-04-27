@@ -3,12 +3,14 @@ package com.example.enjoytrip.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Slf4j
 public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
@@ -32,5 +34,14 @@ public class TokenProvider {
                 .expiration(new Date(System.currentTimeMillis()+expirationTime))
                 .signWith(key)
                 .compact();
+    }
+
+    public boolean validateToken(String token){
+        Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return true;
     }
 }
