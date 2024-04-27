@@ -11,13 +11,14 @@ import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("WeatherClient 통합 테스트")
 @SpringBootTest
 class WeatherClientIntegrationTest {
 
     @Autowired
     WeatherClient weatherClient;
 
-    @DisplayName("날씨 외부 API를 호출한다. 오류발생시 날짜 갱신")
+    @DisplayName("날씨 외부 API를 실제 호출한다")
     @Test
     void getVilageFcst(){
         // given

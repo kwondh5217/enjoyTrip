@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("WeatherClient 단위 테스트")
 class WeatherClientUnitTest {
 
     private WeatherClient weatherClient;
