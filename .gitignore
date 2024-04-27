@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### api key, jwt ###
+src/main/resources/application-auth.properties
