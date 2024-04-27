@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -21,7 +24,9 @@ class WeatherClientIntegrationTest {
         int numOfRows = 50;
         int pageNo = 1;
         String dataType = "json";
-        String baseDate = "20240425";
+        String baseDate = LocalDate.now()
+                .minusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String baseTime = "0500";
         int nx = 55;
         int ny = 127;

@@ -4,6 +4,9 @@ import com.example.enjoytrip.weather.dto.WeatherRequestDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class WeatherClientUnitTest {
@@ -21,7 +24,9 @@ class WeatherClientUnitTest {
         int numOfRows = 1;
         int pageNo = 1;
         String dataType = "json";
-        String baseDate = "20240425";
+        String baseDate = LocalDate.now()
+                .minusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String baseTime = "0500";
         int nx = 55;
         int ny = 127;
@@ -42,7 +47,6 @@ class WeatherClientUnitTest {
 
         // then
         assertThat(returnMessage).isNotNull();
-
     }
 
 }
