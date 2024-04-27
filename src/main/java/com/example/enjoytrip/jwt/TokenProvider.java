@@ -45,12 +45,12 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String token){
-        Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return true;
+        try {
+            getPayload(token);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
     }
 
     public String getEmailFromToken(String token){
