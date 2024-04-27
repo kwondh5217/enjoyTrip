@@ -45,11 +45,11 @@ class TokenProviderTest {
     @Test
     void generateToken_success() {
         // given
-        String username = "user";
+        String userEmail = "user@email.com";
         String password = "password";
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(username, password, Collections.singletonList(authority));
+                new UsernamePasswordAuthenticationToken(userEmail, password, Collections.singletonList(authority));
 
         // when
         String token = tokenProvider.generateToken(authentication);
@@ -61,7 +61,7 @@ class TokenProviderTest {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        assertThat(claims.getSubject()).isEqualTo(username);
+        assertThat(claims.getSubject()).isEqualTo(userEmail);
         assertThat(claims.get("auth").toString()).contains(authority.toString());
     }
 
@@ -69,12 +69,10 @@ class TokenProviderTest {
     @Test
     void validateToken_fail_signature(){
         // given
-        String username = "user";
-        String invalidToken = Jwts.builder()
-                .subject(username)
-                .signWith(Jwts.SIG.HS256.key().build()) // 랜덤으로 생성된 키 값
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .compact();
+        String userEmail = "user";
+        String invalidToken = createToken(userEmail,
+                Jwts.SIG.HS256.key().build(), // 랜덤 키 생성
+                new Date(System.currentTimeMillis()+EXPIRATION_TIME));
 
         // expect
         Assertions.assertThrows(SignatureException.class,
@@ -85,12 +83,8 @@ class TokenProviderTest {
     @Test
     void validateToken_fail_expire(){
         // given
-        String username = "user";
-        String invalidToken = Jwts.builder()
-                .subject(username)
-                .signWith(key)
-                .expiration(new Date(System.currentTimeMillis()-1000))
-                .compact();
+        String userEmail = "user";
+        String invalidToken = createToken(userEmail, key, new Date(System.currentTimeMillis() - 1000));
 
         // expect
         Assertions.assertThrows(ExpiredJwtException.class,
@@ -106,5 +100,29 @@ class TokenProviderTest {
         // expect
         Assertions.assertThrows(MalformedJwtException.class,
                 () -> tokenProvider.validateToken(illegalToken));
+    }
+
+    @DisplayName("토큰에서 사용자의 이메일을 찾아서 반환")
+    @Test
+    void getEmailFromToken() {
+        // given
+        String userEmail = "user@email.com";
+        String token = createToken(userEmail, key,
+                new Date(System.currentTimeMillis() + EXPIRATION_TIME));
+
+        // when
+        String userEmailFromToken = tokenProvider.getEmailFromToken(token);
+
+        // then
+        assertThat(userEmailFromToken).isEqualTo(userEmail);
+    }
+
+
+    private String createToken(String userEmail, SecretKey key, Date date){
+        return Jwts.builder()
+                .subject(userEmail)
+                .signWith(key)
+                .expiration(date)
+                .compact();
     }
 }
