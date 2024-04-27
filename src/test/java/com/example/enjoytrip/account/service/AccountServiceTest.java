@@ -19,6 +19,8 @@ import org.modelmapper.ModelMapper;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+
+@DisplayName("AccountService 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
     static final int VALID_ACCOUNT_ID = 1;
