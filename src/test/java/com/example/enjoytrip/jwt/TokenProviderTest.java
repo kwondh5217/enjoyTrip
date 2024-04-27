@@ -1,9 +1,12 @@
 package com.example.enjoytrip.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,9 +17,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.crypto.SecretKey;
 import java.util.Collections;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("TokenProvider 단위 테스트")
 class TokenProviderTest {
 
     String SECRET_KEY = "4dqI8DCqUioD1X154heittWjgeXnDTC+1/yvGro5aP4="; // 테스트 용
@@ -46,10 +51,10 @@ class TokenProviderTest {
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(username, password, Collections.singletonList(authority));
 
-//      when
+        // when
         String token = tokenProvider.generateToken(authentication);
 
-//      then
+        // then
         assertThat(token).isNotNull();
         Claims claims = Jwts.parser()
                 .verifyWith(key)
@@ -60,5 +65,46 @@ class TokenProviderTest {
         assertThat(claims.get("auth").toString()).contains(authority.toString());
     }
 
+    @DisplayName("토큰 서명이 잘못되었을 경우 에러를 발생")
+    @Test
+    void validateToken_fail_signature(){
+        // given
+        String username = "user";
+        String invalidToken = Jwts.builder()
+                .subject(username)
+                .signWith(Jwts.SIG.HS256.key().build()) // 랜덤으로 생성된 키 값
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .compact();
 
+        // expect
+        Assertions.assertThrows(SignatureException.class,
+                () -> tokenProvider.validateToken(invalidToken));
+    }
+
+    @DisplayName("토큰이 만료되었을 경우 에러를 발생")
+    @Test
+    void validateToken_fail_expire(){
+        // given
+        String username = "user";
+        String invalidToken = Jwts.builder()
+                .subject(username)
+                .signWith(key)
+                .expiration(new Date(System.currentTimeMillis()-1000))
+                .compact();
+
+        // expect
+        Assertions.assertThrows(ExpiredJwtException.class,
+                () -> tokenProvider.validateToken(invalidToken));
+    }
+
+    @DisplayName("토큰의 형식이 잘못되었을 경우 에러를 발생")
+    @Test
+    void validateToken_fail_invalid(){
+        // given
+        String illegalToken = "this.is.wrong.token.";
+
+        // expect
+        Assertions.assertThrows(MalformedJwtException.class,
+                () -> tokenProvider.validateToken(illegalToken));
+    }
 }
