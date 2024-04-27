@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.crypto.SecretKey;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
@@ -107,14 +108,43 @@ class TokenProviderTest {
     void getEmailFromToken() {
         // given
         String userEmail = "user@email.com";
-        String token = createToken(userEmail, key,
-                new Date(System.currentTimeMillis() + EXPIRATION_TIME));
+        String password = "password";
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userEmail, password, Collections.singletonList(authority));
+        String token = tokenProvider.generateToken(authentication);
 
         // when
         String userEmailFromToken = tokenProvider.getEmailFromToken(token);
 
         // then
         assertThat(userEmailFromToken).isEqualTo(userEmail);
+    }
+
+    @DisplayName("토큰에서 사용자의 권한을 찾아서 반환")
+    @Test
+    void getAuthoritiesFromToken(){
+        // given
+        String userEmail = "user@email.com";
+        String password = "password";
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userEmail, password, Collections.singletonList(authority));
+        String token = tokenProvider.generateToken(authentication);
+
+        // when
+        Collection<SimpleGrantedAuthority> authorities =
+                (Collection<SimpleGrantedAuthority>) tokenProvider.getAuthoritiesFromToken(token);
+
+        // then
+        boolean isEquals = false;
+        for (SimpleGrantedAuthority simpleGrantedAuthority : authorities) {
+            if(simpleGrantedAuthority.getAuthority().contains(authority.getAuthority())){
+                isEquals = true;
+            }
+        }
+
+        assertThat(isEquals).isTrue();
     }
 
 
