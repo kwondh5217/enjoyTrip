@@ -71,7 +71,7 @@ class AccountServiceTest {
         Integer returnCode = accountService.join(requestDto);
 
         // then
-        Assertions.assertThat(returnCode).isEqualTo(1);
+        Assertions.assertThat(returnCode).isEqualTo(SUCCESS_CODE);
     }
 
     @DisplayName("회원저장 요청 시, 유니크 제약 조건이 위배된다면 custom 에러를 발생")
