@@ -3,6 +3,7 @@ package com.example.enjoytrip.account.dao;
 import com.example.enjoytrip.account.domain.Account;
 import com.example.enjoytrip.account.dto.AccountRequestDto;
 import com.example.enjoytrip.account.dto.AccountResponseDto;
+import com.example.enjoytrip.touristspot.domain.TouristSpot;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -12,4 +13,5 @@ public interface AccountDao {
     int update(Account account);
     int delete(Integer accountId);
     Account findByEmail(String email);
+    int addTouristspot(Account account, TouristSpot touristSpot);
 }

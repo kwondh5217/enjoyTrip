@@ -1,12 +1,14 @@
 package com.example.enjoytrip.account.controller;
 
 import com.example.enjoytrip.account.common.AccountTestUtil;
+import com.example.enjoytrip.account.common.BaseControllerTest;
 import com.example.enjoytrip.account.domain.Account;
 import com.example.enjoytrip.account.domain.AccountRole;
 import com.example.enjoytrip.account.dto.AccountRequestDto;
 import com.example.enjoytrip.account.dto.AccountResponseDto;
 import com.example.enjoytrip.account.service.AccountService;
 import com.example.enjoytrip.config.SecurityConfig;
+import com.example.enjoytrip.jwt.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,18 +27,13 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(SecurityConfig.class)
-@DisplayName("Account 컨트롤러 단위 테스트")
-@ActiveProfiles("test")
 @WebMvcTest(controllers = AccountController.class)
-class AccountControllerTest {
+class AccountControllerTest extends BaseControllerTest {
 
     @MockBean
     AccountService accountService;
-
     @Autowired
     ObjectMapper objectMapper;
-
     @Autowired
     MockMvc mockMvc;
 

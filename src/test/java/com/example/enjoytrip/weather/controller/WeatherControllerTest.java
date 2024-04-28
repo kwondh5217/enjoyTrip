@@ -1,6 +1,8 @@
 package com.example.enjoytrip.weather.controller;
 
+import com.example.enjoytrip.account.common.BaseControllerTest;
 import com.example.enjoytrip.config.SecurityConfig;
+import com.example.enjoytrip.jwt.TokenProvider;
 import com.example.enjoytrip.weather.WeatherController;
 import com.example.enjoytrip.weather.client.WeatherClient;
 import com.example.enjoytrip.weather.dto.WeatherRequestDto;
@@ -21,10 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(SecurityConfig.class)
-@ActiveProfiles("test")
 @WebMvcTest(WeatherController.class)
-class WeatherControllerTest {
+class WeatherControllerTest extends BaseControllerTest {
 
     @Autowired
     MockMvc mockMvc;

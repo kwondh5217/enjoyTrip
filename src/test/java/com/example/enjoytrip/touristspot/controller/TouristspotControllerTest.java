@@ -1,7 +1,9 @@
 package com.example.enjoytrip.touristspot.controller;
 
+import com.example.enjoytrip.account.common.BaseControllerTest;
 import com.example.enjoytrip.common.dto.PageDto;
 import com.example.enjoytrip.config.SecurityConfig;
+import com.example.enjoytrip.jwt.TokenProvider;
 import com.example.enjoytrip.touristspot.domain.TouristSpot;
 import com.example.enjoytrip.touristspot.service.TouristspotService;
 import org.junit.jupiter.api.DisplayName;
@@ -25,14 +27,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(SecurityConfig.class)
-@ActiveProfiles("test")
 @WebMvcTest(controllers = TouristspotController.class)
-class TouristspotControllerTest {
+class TouristspotControllerTest extends BaseControllerTest {
 
     @Autowired
     MockMvc mockMvc;
-
     @MockBean
     TouristspotService touristspotService;
 

@@ -1,12 +1,9 @@
 package com.example.enjoytrip.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,6 +51,8 @@ class TokenProviderTest {
 
         // when
         String token = tokenProvider.generateToken(authentication);
+
+        System.out.println(token);
 
         // then
         assertThat(token).isNotNull();

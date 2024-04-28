@@ -15,10 +15,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @DisplayName("AccountService 단위 테스트")
 @ExtendWith(MockitoExtension.class)
@@ -28,8 +34,13 @@ class AccountServiceTest {
 
     @Mock
     AccountDao accountDao;
+    @Mock
+    Authentication authentication;
+    @Mock
+    SecurityContext securityContext;
     AccountService accountService;
     ModelMapper modelMapper;
+    PasswordEncoder passwordEncoder;
     Account account;
     AccountRequestDto requestDto;
     AccountResponseDto responseDto;
@@ -37,7 +48,9 @@ class AccountServiceTest {
     @BeforeEach
     void init () {
         modelMapper = new ModelMapper();
-        accountService = new AccountServiceImpl(accountDao, modelMapper);
+        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        accountService = new AccountServiceImpl(accountDao, modelMapper, passwordEncoder);
+
 
         String email = "test@email.com";
         String password = "pass";
@@ -90,6 +103,12 @@ class AccountServiceTest {
     @Test
     void update_success() {
         // given
+        securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        authentication = mock(Authentication.class);
+
+        given(securityContext.getAuthentication()).willReturn(authentication);
+        given(authentication.isAuthenticated()).willReturn(true);
         given(accountDao.update(any(Account.class))).willReturn(SUCCESS_CODE);
 
         // when

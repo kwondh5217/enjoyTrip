@@ -3,6 +3,7 @@ package com.example.enjoytrip.account.dao;
 import com.example.enjoytrip.account.common.AccountTestUtil;
 import com.example.enjoytrip.account.domain.Account;
 import com.example.enjoytrip.account.domain.AccountRole;
+import com.example.enjoytrip.touristspot.dao.TouristspotDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class AccountDaoTest {
 
     @Autowired
     AccountDao accountDao;
+    @Autowired
+    TouristspotDao touristspotDao;
     Account account;
 
     @BeforeEach
@@ -49,7 +52,6 @@ class AccountDaoTest {
         assertThat(join).isEqualTo(successCode);
         assertThat(account.getAccountId()).isNotNull();
     }
-
 
     @DisplayName("유효한 회원 ID로 회원조회 요청 시, 일치하는 회원정보 반환")
     @Test
@@ -96,4 +98,13 @@ class AccountDaoTest {
         assertThat(delete).isEqualTo(1);
         assertThat(deletedAccount).isNull();
     }
+
+//    @DisplayName("회원이 여행지를 관심목록에 추가")
+//    @Test
+//    void addTouristspot_success() {
+//        // given
+//        accountDao.join(account);
+//        int id = 125266;
+//        touristspotDao.findById(id);
+//    }
 }

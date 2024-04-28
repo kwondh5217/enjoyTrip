@@ -26,7 +26,7 @@ class WeatherClientIntegrationTest {
         int pageNo = 1;
         String dataType = "json";
         String baseDate = LocalDate.now()
-                .minusDays(1)
+//                .minusDays(1)
                 .format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String baseTime = "0500";
         int nx = 55;
